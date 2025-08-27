@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Exámenes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .config-panel {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .options label {
+            display: block;
+            margin: 8px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .options label:hover {
+            background-color: #e9ecef;
+        }
+        .exam-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .hidden {
+            display: none;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Exámenes</h1>
+        
+        <div id="configPanel" class="config-panel">
+            <h2>Configuración del Examen</h2>
+            <label for="numQuestions">Número de preguntas (máximo 5):</label>
+            <input type="number" id="numQuestions" min="1" max="5" value="3">
+            <br>
+            <button id="generateBtn">Generar Examen</button>
+        </div>
+        
+        <div id="examContainer" class="hidden">
+            <div class="exam-title">
+                <h2>This is Dry RUN for Terraform</h2>
+                <p>Responde las siguientes preguntas de opción múltiple:</p>
+            </div>
+            
+            <form id="examForm">
+                <!-- Las preguntas se insertarán aquí dinámicamente -->
+            </form>
+            
+            <button id="submitBtn">Enviar Respuestas</button>
+            <button id="newExamBtn">Generar Nuevo Examen</button>
+            
+            <div id="results" class="hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de preguntas (ejemplo con 5 preguntas, deberás agregar las 34)
+        const questionPool = [
+            {
+                question: "¿When running terraform init, it will do the following?",
+                options: ["initial a new terraform cloud remote worksapce", "create a state file", "create a dependency lock file", "create a terraform directory", "dowload plugin dependencies"],
+                correctIndex: 3
+            },
+            {
+                question: "¿Does the terraform state file store sensitive values??",
+                options: ["No, input variables are automatically encrypted when stored in the state file.", "Yes, but if you apply sensitive = true sensitive true, the value will be masked in the statefile.", "Yes, it can store sensitive state files, regardless of attributes applied", "No, the statefile does not contain sensitive values from variables."],
+                correctIndex: 1
+            },
+            {
+                question: "¿How do you declare an input variable in Terraform??",
+                options: ["Nilo", "Amazonas", "Misisipi", "Yangtsé"],
+                correctIndex: 1
+            },
+            {
+                question: "¿When terraform locks its state it creates a dependency lock file called .terraform.lock?",
+                options: ["FALSE", "TRUE"],
+                correctIndex: 1
+            },
+            {
+                question: "¿Wow can you mark a resource for replacement? (Choose 2)?",
+                options: ["terraform apply -replace", "terraform state mv", "terraform resource replace", "terraform replace", "terraform taint"],
+                correctIndex: 2
+            }
+            // ... Agrega aquí las 34 preguntas con este formato
+        ];
+
+        // Elementos DOM
+        const configPanel = document.getElementById('configPanel');
+        const examContainer = document.getElementById('examContainer');
+        const examForm = document.getElementById('examForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const newExamBtn = document.getElementById('newExamBtn');
+        const resultsDiv = document.getElementById('results');
+        const numQuestionsInput = document.getElementById('numQuestions');
+
+        // Generar examen aleatorio
+        generateBtn.addEventListener('click', () => {
+            const numQuestions = parseInt(numQuestionsInput.value);
+            
+            if (numQuestions > questionPool.length) {
+                alert(`No hay suficientes preguntas en el pool. Máximo disponible: ${questionPool.length}`);
+                return;
+            }
+            
+            // Seleccionar preguntas aleatorias
+            const selectedQuestions = getRandomQuestions(numQuestions);
+            
+            // Generar HTML para las preguntas
+            examForm.innerHTML = '';
+            selectedQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                questionDiv.innerHTML = `
+                    <p><strong>${index + 1}. ${q.question}</strong></p>
+                    <div class="options">
+                        ${q.options.map((option, i) => `
+                            <label>
+                                <input type="radio" name="question${index}" value="${i}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                
+                examForm.appendChild(questionDiv);
+            });
+            
+            // Mostrar examen y ocultar panel de configuración
+            configPanel.classList.add('hidden');
+            examContainer.classList.remove('hidden');
+            resultsDiv.classList.add('hidden');
+        });
+
+        // Obtener preguntas aleatorias
+        function getRandomQuestions(num) {
+            // Copiar el array de preguntas
+            const shuffled = [...questionPool];
+            // Aleatorizar el orden
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            // Devolver el número solicitado
+            return shuffled.slice(0, num);
+        }
+
+        // Calcular resultados
+        submitBtn.addEventListener('click', () => {
+            const selectedQuestions = examForm.querySelectorAll('.question');
+            let score = 0;
+            let resultsHTML = '<h3>Resultados:</h3><ol>';
+            
+            selectedQuestions.forEach((questionDiv, index) => {
+                const selectedOption = questionDiv.querySelector('input[type="radio"]:checked');
+                const questionData = questionPool.find(q => q.question === questionDiv.querySelector('strong').textContent.replace(`${index + 1}. `, ''));
+                
+                if (selectedOption) {
+                    const userAnswer = parseInt(selectedOption.value);
+                    if (userAnswer === questionData.correctIndex) {
+                        score++;
+                        resultsHTML += `<li>Correcto! 👍</li>`;
+                    } else {
+                        resultsHTML += `<li>Incorrecto. La respuesta correcta era: "${questionData.options[questionData.correctIndex]}" 👎</li>`;
+                    }
+                } else {
+                    resultsHTML += `<li>No respondida. La respuesta correcta era: "${questionData.options[questionData.correctIndex]}"</li>`;
+                }
+            });
+            
+            resultsHTML += `</ol><p><strong>Puntuación: ${score} de ${selectedQuestions.length}</strong></p>`;
+            resultsDiv.innerHTML = resultsHTML;
+            resultsDiv.classList.remove('hidden');
+        });
+
+        // Generar nuevo examen
+        newExamBtn.addEventListener('click', () => {
+            examContainer.classList.add('hidden');
+            configPanel.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
