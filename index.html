@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Exámenes</title>
+    <title>Generador de Exámenes - Opción Múltiple</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -75,6 +75,12 @@
             background-color: #f9f9f9;
             border-radius: 5px;
         }
+        .question-type {
+            font-style: italic;
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -83,16 +89,16 @@
         
         <div id="configPanel" class="config-panel">
             <h2>Configuración del Examen</h2>
-            <label for="numQuestions">Número de preguntassss (máximo 5):</label>
-            <input type="number" id="numQuestions" min="1" max="5" value="3">
+            <label for="numQuestions">Número de preguntas (máximo 34):</label>
+            <input type="number" id="numQuestions" min="1" max="34" value="5">
             <br>
             <button id="generateBtn">Generar Examen</button>
         </div>
         
         <div id="examContainer" class="hidden">
             <div class="exam-title">
-                <h2>This is Dry RUN for Terraformm</h2>
-                <p>Responde las siguientes preguntas de opción múltiple:</p>
+                <h2>Examen de Conocimientos</h2>
+                <p>Responde las siguientes preguntas:</p>
             </div>
             
             <form id="examForm">
@@ -107,32 +113,37 @@
     </div>
 
     <script>
-        // Base de datos de preguntas (ejemplo con 5 preguntas, deberás agregar las 34)
+        // Base de datos de preguntas (ahora con diferentes tipos)
         const questionPool = [
-            {
-                question: "¿When running terraform init, it will do the following?",
-                options: ["initial a new terraform cloud remote worksapce", "create a state file", "create a dependency lock file", "create a terraform directory", "dowload plugin dependencies"],
-                correctIndex: 3
-            },
             {
                 question: "¿Does the terraform state file store sensitive values??",
                 options: ["No, input variables are automatically encrypted when stored in the state file.", "Yes, but if you apply sensitive = true sensitive true, the value will be masked in the statefile.", "Yes, it can store sensitive state files, regardless of attributes applied", "No, the statefile does not contain sensitive values from variables."],
-                correctIndex: 1
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
             },
             {
                 question: "¿How do you declare an input variable in Terraform??",
-                options: ["Nilo", "Amazonas", "Misisipi", "Yangtsé"],
-                correctIndex: 1
+                options: ["1965", "1969", "1972", "1958"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single"
+            },
+            {
+                question: "¿When running terraform init, it will do the following?",
+                options: ["initial a new terraform cloud remote worksapce", "create a state file", "create a dependency lock file", "create a terraform directory", "dowload plugin dependencies"],
+                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                type: "multiple" // Tipo de pregunta: múltiples respuestas
             },
             {
                 question: "¿When terraform locks its state it creates a dependency lock file called .terraform.lock?",
                 options: ["FALSE", "TRUE"],
-                correctIndex: 1
+                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                type: "multiple"
             },
             {
                 question: "¿Wow can you mark a resource for replacement? (Choose 2)?",
                 options: ["terraform apply -replace", "terraform state mv", "terraform resource replace", "terraform replace", "terraform taint"],
-                correctIndex: 2
+                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                type: "multiple"
             }
             // ... Agrega aquí las 34 preguntas con este formato
         ];
@@ -165,12 +176,17 @@
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question';
                 
+                // Determinar el tipo de input según el tipo de pregunta
+                const inputType = q.type === 'multiple' ? 'checkbox' : 'radio';
+                const typeText = q.type === 'multiple' ? '(Selecciona todas las opciones correctas)' : '(Selecciona una opción)';
+                
                 questionDiv.innerHTML = `
                     <p><strong>${index + 1}. ${q.question}</strong></p>
+                    <div class="question-type">${typeText}</div>
                     <div class="options">
                         ${q.options.map((option, i) => `
                             <label>
-                                <input type="radio" name="question${index}" value="${i}">
+                                <input type="${inputType}" name="question${index}" value="${i}">
                                 ${option}
                             </label>
                         `).join('')}
@@ -206,19 +222,29 @@
             let resultsHTML = '<h3>Resultados:</h3><ol>';
             
             selectedQuestions.forEach((questionDiv, index) => {
-                const selectedOption = questionDiv.querySelector('input[type="radio"]:checked');
-                const questionData = questionPool.find(q => q.question === questionDiv.querySelector('strong').textContent.replace(`${index + 1}. `, ''));
+                // Encontrar la pregunta correspondiente en el pool
+                const questionText = questionDiv.querySelector('strong').textContent.replace(`${index + 1}. `, '');
+                const questionData = questionPool.find(q => q.question === questionText);
                 
-                if (selectedOption) {
-                    const userAnswer = parseInt(selectedOption.value);
-                    if (userAnswer === questionData.correctIndex) {
+                // Obtener las respuestas seleccionadas por el usuario
+                const selectedOptions = Array.from(questionDiv.querySelectorAll('input:checked')).map(input => parseInt(input.value));
+                
+                if (selectedOptions.length > 0) {
+                    // Verificar si las respuestas son correctas
+                    const isCorrect = arraysEqual(selectedOptions.sort(), questionData.correctAnswers.sort());
+                    
+                    if (isCorrect) {
                         score++;
                         resultsHTML += `<li>Correcto! 👍</li>`;
                     } else {
-                        resultsHTML += `<li>Incorrecto. La respuesta correcta era: "${questionData.options[questionData.correctIndex]}" 👎</li>`;
+                        // Mostrar respuestas correctas
+                        const correctOptions = questionData.correctAnswers.map(i => questionData.options[i]).join(', ');
+                        resultsHTML += `<li>Incorrecto. Las respuestas correctas eran: "${correctOptions}" 👎</li>`;
                     }
                 } else {
-                    resultsHTML += `<li>No respondida. La respuesta correcta era: "${questionData.options[questionData.correctIndex]}"</li>`;
+                    // Mostrar respuestas correctas para preguntas no respondidas
+                    const correctOptions = questionData.correctAnswers.map(i => questionData.options[i]).join(', ');
+                    resultsHTML += `<li>No respondida. Las respuestas correctas eran: "${correctOptions}"</li>`;
                 }
             });
             
@@ -226,6 +252,15 @@
             resultsDiv.innerHTML = resultsHTML;
             resultsDiv.classList.remove('hidden');
         });
+
+        // Función para comparar si dos arrays son iguales
+        function arraysEqual(a, b) {
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) return false;
+            }
+            return true;
+        }
 
         // Generar nuevo examen
         newExamBtn.addEventListener('click', () => {
