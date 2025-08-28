@@ -118,7 +118,7 @@
             {
                 question: "¿Does the terraform state file store sensitive values??",
                 options: ["No, input variables are automatically encrypted when stored in the state file.", "Yes, but if you apply sensitive = true sensitive true, the value will be masked in the statefile.", "Yes, it can store sensitive state files, regardless of attributes applied", "No, the statefile does not contain sensitive values from variables."],
-                correctAnswers: [Yes, it can store sensitive state files, regardless of attributes applied], // Solo una respuesta correcta
+                correctAnswers: [2], // Solo una respuesta correcta
                 type: "single" // Tipo de pregunta: una sola respuesta
             },
             {
@@ -130,19 +130,19 @@
             {
                 question: "¿When running terraform init, it will do the following?",
                 options: ["initial a new terraform cloud remote worksapce", "create a state file", "create a dependency lock file", "create a terraform directory", "dowload plugin dependencies"],
-                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                correctAnswers: [2, 3, 4], // Múltiples respuestas correctas
                 type: "multiple" // Tipo de pregunta: múltiples respuestas
             },
             {
                 question: "¿When terraform locks its state it creates a dependency lock file called .terraform.lock?",
                 options: ["FALSE", "TRUE"],
-                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                correctAnswers: [0], // Múltiples respuestas correctas
                 type: "multiple"
             },
             {
                 question: "¿Wow can you mark a resource for replacement? (Choose 2)?",
                 options: ["terraform apply -replace", "terraform state mv", "terraform resource replace", "terraform replace", "terraform taint"],
-                correctAnswers: [0, 2], // Múltiples respuestas correctas
+                correctAnswers: [0, 4], // Múltiples respuestas correctas
                 type: "multiple"
             }
             // ... Agrega aquí las 34 preguntas con este formato
