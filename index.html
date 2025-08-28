@@ -89,8 +89,8 @@
         
         <div id="configPanel" class="config-panel">
             <h2>Configuración del Examen</h2>
-            <label for="numQuestions">Número de preguntas (máximo 3):</label>
-            <input type="number" id="numQuestions" min="1" max="5" value="3">
+            <label for="numQuestions">Número de preguntas (máximo 10):</label>
+            <input type="number" id="numQuestions" min="1" max="16" value="10">
             <br>
             <button id="generateBtn">Generar Examen</button>
         </div>
@@ -122,10 +122,10 @@
                 type: "single" // Tipo de pregunta: una sola respuesta
             },
             {
-                question: "¿How do you declare an input variable in Terraform??",
-                options: ["1965", "1969", "1972", "1958"],
-                correctAnswers: [1], // Solo una respuesta correcta
-                type: "single"
+                question: "¿When we need to rename a resource what Terraform command should we use?",
+                options: ["teraform rename", "terraform mv", "teraform resource rename", "terraform state mv"],
+                correctAnswers: [3], // Solo una respuesta correcta
+                type: "multiple" // Tipo de pregunta: una sola respuesta
             },
             {
                 question: "¿When running terraform init, it will do the following?",
@@ -135,16 +135,83 @@
             },
             {
                 question: "¿When terraform locks its state it creates a dependency lock file called .terraform.lock?",
-                options: ["FALSE", "TRUE"],
-                correctAnswers: [0], // Múltiples respuestas correctas
-                type: "multiple"
+                options: ["FALSE", "TRUE"], // Solo una respuesta correcta
+                correctAnswers: [0], // Tipo de pregunta: una sola respuesta
+                type: "Single"
             },
             {
-                question: "¿Wow can you mark a resource for replacement? (Choose 2)?",
+                question: "How can you mark a resource for replacement? (Choose 2)?",
                 options: ["terraform apply -replace", "terraform state mv", "terraform resource replace", "terraform replace", "terraform taint"],
                 correctAnswers: [0, 4], // Múltiples respuestas correctas
-                type: "multiple"
-            }
+                type: "multiple" // Tipo de pregunta: múltiples respuestas
+            },
+            {
+                question: "What is the scope of Local Values between parent and child modules??",
+                options: ["Local values defined in the submodules are accessible to the parent but not between adjacent child modules", "Local values defined in the parent are accessible to all the child modules", "Local values are scoped for the only current module", "Local values in the parent module are only accessible to the parent."],
+                correctAnswers: [2], // Múltiples respuestas correctas
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "What is the scope of Local Values between parent and child modules??",
+                options: ["terraform apply -replace", "terraform state mv", "Local values are scoped for the only current module", "terraform replace", "terraform taint"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "terraform plan must be run before perform terraform apply.",
+                options: ["TRUE", "FALSE"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "You would like to reuse the same Terraform configuration for your development and production environments with a different state file for each. Which command would you use?",
+                options: ["terraform init", "terraform workspace", "terraform state", "terraform import"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿Which of the following commands will remove a resource from the state file without destroying it?",
+                options: ["terraform destroy -target", "terraform state rm", "terraform remove", "terraform state delete"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿A developer has deleted a database resource for Google Cloud that was being managed by a terraform state file. What will happen when the developer runs terraform apply -refresh-only??",
+                options: ["terraform apply -refresh-only will simply print out to the CLI what has changed", "The deleted database resource will be recreated", "-refresh-only is not an available flag on apply, you need use to terraform refresh", "The state file will be updated to reflect the change of the deleted resource"],
+                correctAnswers: [3], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿HashiCorp Configuration Language (HCL) supports user-defined functions. Is this statement true??",
+                options: ["TRUE", "FALSE"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿What type of block is used to construct a collection of nested configuration blocks?",
+                options: ["loop", "nesting", "dynamic", "for each"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿What is the primary use of variables in Terraform configurations?",
+                options: ["To determine the execution order of resources", "To handle secret injection", "To parameterize configurations and make them reusable", "To connect resources together"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿What is the primary purpose of the backend block configuration in Terraform?",
+                options: ["To store and manage the Terraform state in a remote location", "To determine the execution order of resources", "To handle secret injection", "To connect resources together"],
+                correctAnswers: [0], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿Which of the following best describes Data Sources in Terraform?",
+                options: ["Data to be fetched or computed for use elsewhere in terraform configuration.", "A type of variable that must be declared in the Terraform configuration before use.", "Data sources are a way for terraform to keep track of all resources created in the provider’s infrastructure.", "User-defined codes that get executed every time Terraform initializes."],
+                correctAnswers: [0], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+
             // ... Agrega aquí las 34 preguntas con este formato
         ];
 
