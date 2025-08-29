@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Exámenes - Opción Múltiple</title>
+    <title>Dry Run Terraform Test - Opción Múltiple</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -90,7 +90,7 @@
         <div id="configPanel" class="config-panel">
             <h2>Configuración del Examen</h2>
             <label for="numQuestions">Número de preguntas (máximo 10):</label>
-            <input type="number" id="numQuestions" min="1" max="16" value="10">
+            <input type="number" id="numQuestions" min="1" max="24" value="10">
             <br>
             <button id="generateBtn">Generar Examen</button>
         </div>
@@ -116,7 +116,7 @@
         // Base de datos de preguntas (ahora con diferentes tipos)
         const questionPool = [
             {
-                question: "¿Does the terraform state file store sensitive values??",
+                question: "¿Does the terraform state file store sensitive values?",
                 options: ["No, input variables are automatically encrypted when stored in the state file.", "Yes, but if you apply sensitive = true sensitive true, the value will be masked in the statefile.", "Yes, it can store sensitive state files, regardless of attributes applied", "No, the statefile does not contain sensitive values from variables."],
                 correctAnswers: [2], // Solo una respuesta correcta
                 type: "single" // Tipo de pregunta: una sola respuesta
@@ -211,7 +211,56 @@
                 correctAnswers: [0], // Solo una respuesta correcta
                 type: "single" // Tipo de pregunta: una sola respuesta
             },
+            {
+                question: "¿terraform apply ______ will apply changes without requiring user confirmation.",
+                options: ["-force", "All of the options", "-auto-approve", "-approve"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿When you want to remove a record tracking a remote object in your state file but have the remote object (eg. Azure Virtual Machine) to still exist, which command do you use?",
+                options: ["terraform apply -replace", "terraform resource rm", "terraform state rm", "terraform refresh"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿Which Terraform command should you use to remove all the infrastructure components that were created by your Terraform configuration?",
+                options: ["terraform destroy", "terraform init", "terraform apply -auto-approve", "terraform plan -destroy"],
+                correctAnswers: [0], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿Which type of block fetches or computes information for use else where in a Terraform configuration?",
+                options: ["resource", "local", "data", "provider"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿You are studying Terraform and come across the term Module / Which description best fits the concept of a Terraform module?",
+                options: ["A plugin that allows Terraform to interact with a specific cloud provider or service", "A collection of resources that make up a specific piece of infrastructure", "A set of variables used to configure Terraform resources", "A method to specify version constraints for providers"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿You've just started using Terraform to manage your infrastructure. After running terraform apply, you want to check the state of your infrastructure. Which file would you look for to find the current state of your resources?",
+                options: ["terraform.config", "terraform.tfstate", "terraform.tfvars", "terraform.state"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿Which of the following best represents a Terraform plugin??",
+                options: ["Terraform registry", "Terraform provider", "Terraform workspaceerraform.tfvars", "Terraform module"],
+                correctAnswers: [1], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
+            {
+                question: "¿You want to store details about a server, specifically its name (a string) and memory size (a number). Which variable type is most suitable??",
+                options: ["map", "set", "object", "list"],
+                correctAnswers: [2], // Solo una respuesta correcta
+                type: "single" // Tipo de pregunta: una sola respuesta
+            },
 
+           
             // ... Agrega aquí las 34 preguntas con este formato
         ];
 
