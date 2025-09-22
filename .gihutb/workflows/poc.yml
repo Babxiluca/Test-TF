@@ -3,7 +3,7 @@ name: Auto PR Creation
 on:
   push:
     branches: 
-      - 'dev'
+
 
     branches-ignore:
       - 'main'
