@@ -2,13 +2,18 @@ name: Auto PR Creation
 
 on:
   push:
-    branches: 
+    branches:
 
 
     branches-ignore:
       - 'main'
       - 'master'
       - 'release/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
