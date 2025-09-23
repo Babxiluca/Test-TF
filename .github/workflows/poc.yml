@@ -57,17 +57,17 @@ jobs:
             -H "Content-Type: application/json" \
             "https://api.github.com/repos/${{ github.repository }}/pulls" \
             -d @- <<EOF
-            {
-              "title": "$PR_TITLE",
-              "head": "$BRANCH_NAME",
-              "base": "$BASE_BRANCH",
-              "body": "$PR_BODY",
-              "draft": true
-            }
-            EOF
-            )
-            echo "$PR_NUMBER" | jq '.number' > pr_number.txt
-            echo "pr_number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
+          {
+            "title": "$PR_TITLE",
+            "head": "$BRANCH_NAME",
+            "base": "$BASE_BRANCH",
+            "body": "$PR_BODY",
+            "draft": true
+          }
+          EOF
+          )
+          echo "$PR_NUMBER" | jq -r '.number' > pr_number.txt
+          echo "pr_number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
         
           
           #if [ "$PR_NUMBER" != "null" ]; then
