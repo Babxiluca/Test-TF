@@ -78,6 +78,7 @@ jobs:
             echo "PR=true" >> $GITHUB_OUTPUT
             echo "sisecreo<<EOF" >> GITHUB_OUTPUT
             echo "PR creado exitosamente: #$PR_NUMBER" >> GITHUB_OUTPUT
+          fi
             
           #   # Agregar label BORRADOR
             # curl -s -L -X POST \
