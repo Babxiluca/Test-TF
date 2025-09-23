@@ -33,7 +33,7 @@ jobs:
             "title": "${{ github.ref_name }}",
             "head": "${{ github.ref_name }}",
             "base": "dev",
-            "body": "Este PR lo esta creando automaticamente un bot by ${{ github.actor }}.",
+            "body": "Este PR lo esta creando automaticamente por bot by ${{ github.actor }}.",
             "draft": true
           }
           EOF
