@@ -30,11 +30,12 @@ jobs:
           echo "PR Title: $PR_TITLE"
 
           # Crear PR en estado draft
-          PR_NUMBER=$(curl -s -L -X POST \
+          PR_NUMBER=$(curl -s -L  \
+            -X POST
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Content-Type: application/json" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls" \
+            https://api.github.com/repos/${{ github.repository }}/pulls \
             -d @- <<EOF
           {
             "title": "$PR_TITLE",
