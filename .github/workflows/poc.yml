@@ -70,8 +70,14 @@ jobs:
           echo "pr_number=$(cat pr_number.txt)" >> $GITHUB_OUTPUT
         
           
-          #if [ "$PR_NUMBER" != "null" ]; then
-          #  echo "PR creado exitosamente: #$PR_NUMBER"
+          if [ "$PR_NUMBER" != "null" ]; then
+            echo "pr_no=false" >> GITHUB_OUTPUT
+            echo "no se creo ni madres"
+            exit 0
+          else  
+            echo "PR=true" >> $GITHUB_OUTPUT
+            echo "sisecreo<<EOF" >> GITHUB_OUTPUT
+            echo "PR creado exitosamente: #$PR_NUMBER" >> GITHUB_OUTPUT
             
           #   # Agregar label BORRADOR
             # curl -s -L -X POST \
