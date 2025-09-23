@@ -60,8 +60,8 @@ jobs:
           {
             "title": "$PR_TITLE",
             "head": "$BRANCH_NAME",
-            "base": "Este PR lo esta creando automaticamente un bot by ${{ github.actor }}.",
-            "body": "$PR_BODY",
+            "base": "dev",
+            "body": "Este PR lo esta creando automaticamente un bot by ${{ github.actor }}.",
             "draft": true
           }
           EOF
