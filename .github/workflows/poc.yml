@@ -40,3 +40,20 @@ jobs:
           )
           echo "$PR_NUMBER" | jq -r '.number' > pr_number.txt
           echo "pr_number=$(cat pr_number.txt)" >> $GITHUB_ENV
+      - name: Output PR number
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ env.pr_number }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          curl -L \
+            -X PATCH  \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/issues \${{PR_NUMBER}} \
+            -d @- <<EOF
+          {
+            "body": "Este PR lo esta creando automaticamente por bot by $ACTOR.",
+          }
+          EOF
+            
