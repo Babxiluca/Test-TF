@@ -1,5 +1,5 @@
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          BASE_BRANCH="dev"
+          run: |
+          #BRANCH_NAME="${{ github.ref_name }}"
           
           # Obtener el mensaje del último commit
           COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
@@ -16,12 +16,12 @@
           #   PR_TITLE="Draft: $PR_TITLE"
           # fi
           
-          # Crear el cuerpo del PR con el mensaje completo del commit
-          PR_BODY="**PR creado automáticamente**\n\n- Creado por: @$GITHUB_ACTOR\n- Rama: $BRANCH_NAME\n- Commit: ${{ github.event.head_commit.id }}\n- Estado: BORRADOR\n\n**Mensaje del commit:**\n\`\`\`\n$COMMIT_MESSAGE\n\`\`\`\n\n**Instrucciones:**\n1. Cambia la label a \"LISTO PARA VERIFICAR\" cuando esté listo\n2. Los revisores serán notificados automáticamente"
+          # # Crear el cuerpo del PR con el mensaje completo del commit
+          # PR_BODY="**PR creado automáticamente**\n\n- Creado por: @$GITHUB_ACTOR\n- Rama: $BRANCH_NAME\n- Commit: ${{ github.event.head_commit.id }}\n- Estado: BORRADOR\n\n**Mensaje del commit:**\n\`\`\`\n$COMMIT_MESSAGE\n\`\`\`\n\n**Instrucciones:**\n1. Cambia la label a \"LISTO PARA VERIFICAR\" cuando esté listo\n2. Los revisores serán notificados automáticamente"
            
-          echo "Creando PR con título: $PR_TITLE"
-          echo "Rama origen: $BRANCH_NAME"
-          echo "Rama destino: $BASE_BRANCH"
+          # echo "Creando PR con título: $PR_TITLE"
+          # echo "Rama origen: $BRANCH_NAME"
+          # echo "Rama destino: $BASE_BRANCH"
 
           # Crear PR en estado draft
           PR_NUMBER=$(curl -s -L -X POST \
@@ -32,9 +32,9 @@
             -d @- <<EOF
           {
             "title": "$PR_TITLE",
-            "head": "$BRANCH_NAME",
-            "base": "$BASE_BRANCH",
-            "body": "$PR_BODY",
+            "head": "${{ github.ref_name }}",
+            "base": "dev",
+            "body": "Este PR lo esta creando automaticamente un bot by ${{ github.actor }}.",
             "draft": true
           }
           EOF
@@ -52,3 +52,18 @@
             echo "sisecreo<<EOF" >> GITHUB_OUTPUT
             echo "PR creado exitosamente: #$PR_NUMBER" >> GITHUB_OUTPUT
           fi
+            
+          #   # Agregar label BORRADOR
+            # curl -s -L -X POST \
+            #   -H "Authorization: token $GITHUB_TOKEN" \
+            #   -H "Accept: application/vnd.github.v3+json" \
+            #   -H "Content-Type: application/json" \
+            #   https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels \
+            #   -d '{"labels":["BORRADOR"]}'
+              
+          #   echo "✅ Label BORRADOR agregado al PR #$PR_NUMBER"
+          # else
+          #   echo "❌ Error al crear PR Pinche Wey:"
+          #   cat pr_response.json
+          #   exit 1
+          # fi
