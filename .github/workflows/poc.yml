@@ -65,8 +65,8 @@ jobs:
           # Obtener número del PR creado
           PR_NUMBER=$(jq -r '.number' pr_response.json)
           
-          if [ "$PR_NUMBER" != "null" ]; then
-            echo "PR creado exitosamente: #$PR_NUMBER"
+          #if [ "$PR_NUMBER" != "null" ]; then
+          #  echo "PR creado exitosamente: #$PR_NUMBER"
             
           #   # Agregar label BORRADOR
           #   curl -s -L -X POST \
