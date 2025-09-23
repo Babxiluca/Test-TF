@@ -25,8 +25,7 @@ jobs:
     steps:
       - name: Get commit message and create PR
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          BASE_BRANCH="dev"
+          BRANCH_NAME="${{ github.ref_name }}"
           
           # Obtener el mensaje del último commit
           COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
