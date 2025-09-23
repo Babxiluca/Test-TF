@@ -8,14 +8,6 @@ on:
       - 'master'
       - 'release/**'
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   create-draft-pr:
     runs-on: ubuntu-latest
@@ -25,6 +17,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get commit message and create PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
         
           # Obtener el mensaje del último commit
